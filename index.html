@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Mess</title>
+    <link rel="icon" type="image/png" href="logo.png">
+    <script src="https://kit.fontawesome.com/643c37d88a.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Microsoft Word Style Toolbar -->
+    <div class="toolbar">
+        <div class="toolbar-header">
+            <div class="quick-access-bar">
+                <button class="quick-btn" id="homeBtn" title="Home">
+                    <i class="fas fa-home"></i>
+                </button>
+                <button class="quick-btn" id="saveBtn" title="Save">
+                    <i class="fas fa-save"></i>
+                </button>
+                <button class="quick-btn" id="undoBtn" title="Undo (Ctrl+Z)">
+                    <i class="fas fa-undo"></i>
+                </button>
+                <button class="quick-btn" id="redoBtn" title="Redo (Ctrl+Y)">
+                    <i class="fas fa-redo"></i>
+                </button>
+                <button class="quick-btn" id="printBtn" title="Print (Ctrl+S)">
+                    <i class="fas fa-print"></i>
+                </button>
+            </div>
+            <div id="source" class="source">未命名的文件</div>
+            <div class="search-box-header">
+                <div id="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="urlInput" placeholder="Enter website URL (e.g., https://example.com)"
+                        autocomplete="off">
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="toolbar-tabs">
+            <button class="tab-btn active">Home</button>
+            <button class="tab-btn">Insert</button>
+            <button class="tab-btn">Design</button>
+            <button class="tab-btn">Layout</button>
+            <button class="tab-btn">References</button>
+            <button class="tab-btn">Review</button>
+            <button class="tab-btn">View</button>
+        </div>
+
+        <!-- Main Toolbar Section -->
+        <div class="toolbar-section">
+            <!-- Row 1: Clipboard and Font Controls -->
+            <div class="toolbar-row-top">
+                <!-- Clipboard Group -->
+                <div class="clipboard-group">
+                    <div class="clipboard-btn-large-wrapper">
+                        <button class="clipboard-btn large" id="pasteBtn" title="Paste (Ctrl+V)">
+                            📋
+                        </button>
+                        <span class="clipboard-label">Paste</span>
+                    </div>
+                    <div class="clipboard-column">
+                        <button class="clipboard-btn small" id="cutBtn" title="Cut (Ctrl+X)">
+                            ✂️
+                        </button>
+                        <button class="clipboard-btn small" id="copyBtn" title="Copy (Ctrl+C)">
+                            📑
+                        </button>
+                        <button class="clipboard-btn small" id="brushBtn" title="Format Painter">
+                            🪠
+                        </button>
+                    </div>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <!-- Font Group -->
+                <div class="font-group">
+                    <div class="row">
+                        <!-- Font Selection -->
+                        <div class="toolbar-input-group">
+                            <label for="fontFamily">Font:</label>
+                            <select id="fontFamily" title="Font family">
+                                <option>Apple Chancery</option>
+                                <option>Arial</option>
+                                <option>Times New Roman</option>
+                                <option>Courier New</option>
+                                <option>Georgia</option>
+                            </select>
+                        </div>
+
+                        <!-- Font Size -->
+                        <div class="toolbar-input-group">
+                            <label for="fontSizeInput">Size:</label>
+                            <input type="number" id="fontSizeInput" min="10" max="48" value="18" title="Font size">
+                        </div>
+                    </div>
+
+                    <!-- Row 2: Text Formatting - Right side icons group -->
+                    <div class="row formatting-icons-group">
+                        <button class="toolbar-btn active" id="boldBtn" title="Bold (Ctrl+B)">
+                            <i class="fas fa-bold"></i>
+                        </button>
+                        <button class="toolbar-btn active" id="italicBtn" title="Italic (Ctrl+I)">
+                            <i class="fas fa-italic"></i>
+                        </button>
+                        <button class="toolbar-btn" id="underlineBtn" title="Underline (Ctrl+U)">
+                            <i class="fas fa-underline"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Strikethrough">
+                            <i class="fas fa-strikethrough"></i>
+                        </button>
+                        <button class="toolbar-btn" id="colorBtn" title="Text Color">
+                            <i class="fas fa-palette"></i>
+                        </button>
+                        <button class="toolbar-btn" id="highlightBtn" title="Highlight">
+                            <i class="fas fa-highlighter"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <!-- Alignment and Other Controls -->
+                <div>
+                    <div class="row">
+                        <button class="toolbar-btn active" title="Align Left">
+                            <i class="fas fa-align-left"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Align Center">
+                            <i class="fas fa-align-center"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Align Right">
+                            <i class="fas fa-align-right"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Justify">
+                            <i class="fas fa-align-justify"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Bullet List">
+                            <i class="fas fa-list-ul"></i>
+                        </button>
+                        <button class="toolbar-btn" id="clearBtn" title="Clear Document">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    <div class="row">
+                        <button class="toolbar-btn" title="Numbered List">
+                            <i class="fas fa-list-ol"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Decrease Indent">
+                            <i class="fas fa-outdent"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Increase Indent">
+                            <i class="fas fa-indent"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Insert Table">
+                            <i class="fas fa-table"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Insert Image">
+                            <i class="fas fa-image"></i>
+                        </button>
+                        <button class="toolbar-btn" title="Insert Link">
+                            <i class="fas fa-link"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="toolbar-separator"></div>
+
+                <!-- Style Group -->
+                <div class="styles-group">
+                    <div class="styles-container">
+                        <button class="style-btn active" title="Normal">
+                            <span class="style-preview">AaBbCcDc</span>
+                            <span class="style-name">Normal</span>
+                        </button>
+                        <button class="style-btn" title="No Spacing">
+                            <span class="style-preview">AaBbCcDc</span>
+                            <span class="style-name">No Spacing</span>
+                        </button>
+                        <button class="style-btn" title="Heading 1">
+                            <span class="style-preview" style="color: #70ad47; font-weight: bold;">AaBbCcDc</span>
+                            <span class="style-name">Heading 1</span>
+                        </button>
+                        <button class="style-btn" title="Heading 2">
+                            <span class="style-preview" style="color: #4472c4; font-weight: bold;">AaBbCcDc</span>
+                            <span class="style-name">Heading 2</span>
+                        </button>
+                    </div>
+                    <div class="styles-header">Styles</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <p>Fetching content...</p>
+        </div>
+
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="wordContainer" class="word-container"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
