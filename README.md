@@ -2,7 +2,7 @@
 
 A Microsoft Word-style interface for fetching and displaying website content in a clean, formatted view.
 
-**[🌐 Live Demo](https://jyx0615/github.io/Word-Mess)**
+**[🌐 Live Demo](https://jyx0615.github.io/Word-Mess/)**
 
 
 ## Overview
