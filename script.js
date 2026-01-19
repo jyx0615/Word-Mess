@@ -109,28 +109,62 @@ class EditorManager {
     }
 
     setupToolbarButtons() {
+        // Make content editable
+        const wordContainer = document.getElementById('wordContainer');
+        wordContainer.contentEditable = 'true';
+        wordContainer.style.outline = 'none';
+
         const buttons = {
             boldBtn: { action: 'bold' },
             italicBtn: { action: 'italic' },
             underlineBtn: { action: 'underline' },
-            highlightBtn: { action: 'highlight' },
+            strikethroughBtn: { action: 'strikeThrough' },
+            highlightBtn: { action: () => this.applyHighlight() },
             clearBtn: { action: () => this.clearDocument() },
             downloadBtn: { action: () => this.downloadDocument() },
             colorBtn: { action: () => this.changeColor() }
         };
 
+        // Handle formatting buttons
         Object.entries(buttons).forEach(([id, config]) => {
             const btn = document.getElementById(id);
             if (btn) {
-                btn.addEventListener('click', () => {
+                btn.addEventListener('click', (e) => {
+                    e.preventDefault();
                     if (typeof config.action === 'string') {
-                        btn.classList.toggle('active');
+                        document.execCommand(config.action, false, null);
+                        this.updateButtonStates();
                     } else {
                         config.action();
                     }
                 });
             }
         });
+
+        // Update button states on selection change
+        wordContainer.addEventListener('mouseup', () => this.updateButtonStates());
+        wordContainer.addEventListener('keyup', () => this.updateButtonStates());
+    }
+
+    updateButtonStates() {
+        const buttons = ['bold', 'italic', 'underline', 'strikeThrough'];
+        const buttonIds = ['boldBtn', 'italicBtn', 'underlineBtn', 'strikethroughBtn'];
+
+        buttons.forEach((command, index) => {
+            const btn = document.getElementById(buttonIds[index]);
+            if (btn) {
+                const isActive = document.queryCommandState(command);
+                if (isActive) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+        });
+    }
+
+    applyHighlight() {
+        document.execCommand('hiliteColor', false, '#ffeb3b');
     }
 
     setupFontControls() {
