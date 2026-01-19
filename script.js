@@ -120,6 +120,7 @@ class EditorManager {
             underlineBtn: { action: 'underline' },
             strikethroughBtn: { action: 'strikeThrough' },
             highlightBtn: { action: () => this.applyHighlight() },
+            resetBtn: { action: () => this.resetFormatting() },
             clearBtn: { action: () => this.clearDocument() },
             downloadBtn: { action: () => this.downloadDocument() },
             colorBtn: { action: () => this.changeColor() }
@@ -164,7 +165,30 @@ class EditorManager {
     }
 
     applyHighlight() {
-        document.execCommand('hiliteColor', false, '#ffeb3b');
+        const selection = window.getSelection();
+        if (!selection.rangeCount) return;
+
+        const range = selection.getRangeAt(0);
+        const parent = range.commonAncestorContainer.parentElement;
+
+        // Check if already highlighted
+        const isHighlighted = parent && (
+            parent.style.backgroundColor === 'rgb(255, 235, 59)' ||
+            parent.style.backgroundColor === '#ffeb3b'
+        );
+
+        if (isHighlighted) {
+            // Remove highlight
+            document.execCommand('hiliteColor', false, 'transparent');
+        } else {
+            // Apply highlight
+            document.execCommand('hiliteColor', false, '#ffeb3b');
+        }
+    }
+
+    resetFormatting() {
+        document.execCommand('removeFormat', false, null);
+        this.updateButtonStates();
     }
 
     setupFontControls() {
@@ -214,7 +238,9 @@ class EditorManager {
 
     changeColor() {
         const color = prompt('Enter color (hex or name):');
-        if (color) console.log('Color changed to:', color);
+        if (color) {
+            document.execCommand('foreColor', false, color);
+        }
     }
 }
 
