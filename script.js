@@ -115,6 +115,8 @@ class EditorManager {
         wordContainer.style.outline = 'none';
 
         const buttons = {
+            undoBtn: { action: 'undo' },
+            redoBtn: { action: 'redo' },
             boldBtn: { action: 'bold' },
             italicBtn: { action: 'italic' },
             underlineBtn: { action: 'underline' },
@@ -122,8 +124,8 @@ class EditorManager {
             highlightBtn: { action: () => this.applyHighlight() },
             resetBtn: { action: () => this.resetFormatting() },
             clearBtn: { action: () => this.clearDocument() },
-            downloadBtn: { action: () => this.downloadDocument() },
-            colorBtn: { action: () => this.changeColor() }
+            colorBtn: { action: () => this.changeColor() },
+            exportPdfBtn: { action: () => this.exportToPDF() }
         };
 
         // Handle formatting buttons
@@ -168,20 +170,13 @@ class EditorManager {
         const selection = window.getSelection();
         if (!selection.rangeCount) return;
 
-        const range = selection.getRangeAt(0);
-        const parent = range.commonAncestorContainer.parentElement;
-
-        // Check if already highlighted
-        const isHighlighted = parent && (
-            parent.style.backgroundColor === 'rgb(255, 235, 59)' ||
-            parent.style.backgroundColor === '#ffeb3b'
-        );
+        // Use queryCommandValue so toggling works even across mixed nodes
+        const current = (document.queryCommandValue('hiliteColor') || '').toLowerCase();
+        const isHighlighted = current === '#ffeb3b' || current === 'rgb(255, 235, 59)';
 
         if (isHighlighted) {
-            // Remove highlight
             document.execCommand('hiliteColor', false, 'transparent');
         } else {
-            // Apply highlight
             document.execCommand('hiliteColor', false, '#ffeb3b');
         }
     }
@@ -189,6 +184,34 @@ class EditorManager {
     resetFormatting() {
         document.execCommand('removeFormat', false, null);
         this.updateButtonStates();
+    }
+
+    exportToPDF() {
+        const wordContainer = document.getElementById('wordContainer');
+        const content = wordContainer.innerHTML;
+        if (!content.trim()) return;
+
+        const popup = window.open('', '', 'width=900,height=650');
+        if (!popup) return;
+
+        popup.document.write(`
+            <html>
+                <head>
+                    <title>Word Mess Export</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; padding: 24px; color: #222; }
+                        img { max-width: 100%; height: auto; display: block; margin: 10px 0; }
+                        .word { white-space: pre-wrap; }
+                    </style>
+                </head>
+                <body>
+                    ${content}
+                </body>
+            </html>
+        `);
+        popup.document.close();
+        popup.focus();
+        popup.print();
     }
 
     setupFontControls() {
@@ -224,16 +247,6 @@ class EditorManager {
         document.getElementById('fontSizeInput').value = 18;
         wordContainer.style.fontSize = '18px';
         document.querySelectorAll('.toolbar-btn.active').forEach(btn => btn.classList.remove('active'));
-    }
-
-    downloadDocument() {
-        const text = document.getElementById('wordContainer').innerText;
-        if (!text.trim()) return;
-
-        const link = document.createElement('a');
-        link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
-        link.download = 'document.txt';
-        link.click();
     }
 
     changeColor() {
